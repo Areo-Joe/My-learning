@@ -225,10 +225,76 @@
 
 ### GRID
 
+#### 容器属性
+
 + 同Flex一样，在父容器上设置`display: grid`
+
 + grid排列只对最容器的顶层子元素生效
+
 + 网格排列可设置为行内元素：`display: inline-grid`
+
 + grid-template-colums：定义列宽，定几列就写几个数字
+
 + grid-template-rows：定义行宽，定几行就写几个数字
+
 + 定义行/列宽时可用`repeat()`函数，如：`grid-template-columns: repeat(3, 33.3%)`；重复某种规律也行：`grid-template-rows: repeat(3, 100px 20px 40px)`
+
 + auto-fill：希望每一行/列容纳尽可能多的项目是使用：`grid-template-columns: repeat(auto-fill, 100px)`
+
++ fr：表示比例，如：`grid-template-rows: 50px 1pr 2pr`，表示第一行宽为50px，第三行行宽是第二行行宽的两倍
+
++ 方括号可为行/列线命名，如：`grid-template-rows: [cl] 50px [cl1] 30px [cl2]`
+
++ row-gap设置行间距，column-gap设置列间距，gap设俩，前row后column
+
++ grid-template-areas：定义区域，如：
+
+  ```css
+  .container {
+      display: grid;
+      grid-template-rows: 100px 100px 100px;
+      grid-template-columns: 100px 100px 100px;
+      grid-template-areas:'a b c'
+                          'd e f'
+                          'g h i'
+  }
+  ```
+
+  如果某些区域不需要利用，则用 . 表示
+
++ 每个区域的起始/终止网格线会被命名为“区域名-start/end"
+
++ grid-auto-flow：设置项目排列顺序
+
++ justify-items/align-items：设置单元格中内容对齐方式
+
++ place-items：align-items和justify-items的简写
+
++ justify-content/align-content：设置整个内容（所有格子）的对齐方式
+
++ place-content：align-content和justify-content的简写
+
++ grid-auto-rows/grid-auto-columns：设置网页自动生成的单元格的大小
+
+#### 项目属性
+
++ grid-column/row-start-end：设置单元格的位置（设置起始/终止行/列）
++ grid-row/column：是上一项的简写
++ grid-area：指定项目放在哪个区域
++ justify/align-self：指定单个项目中内容的对齐方式
+
+--------
+
+### 定位
+
++ 相对定位：position: relative 然后添加top、left等值
++ 绝对定位：position: absolute 同上
++ 固定定位（可随页面滚动）：position: fixed 同上
++ 粘性定位：position: sticky
+
+---------
+
+### 多列布局
+
+用column-count指定需要多少列，或用column-width指定以某个宽度容纳尽可能多的列
+
