@@ -812,4 +812,271 @@ typeof可以返回一个值的数据类型，例：`typeof null`返回值为obje
 #### 原型继承
 
 + 即创建一个子原型（个人理解）
-+ 
+
++ 先定义出子原型：
+
+  ```javascript
+  function Primarystudent(props) {
+      Student.call(this, props);
+      this.grade = props.grade || 1;
+  }
+  ```
+
+  借助中间对象实现原型链
+
+  ```javascript
+  function F() {};
+  F.prototype = Student.prototype;
+  Primarystudent.prototype = new F();
+  Primarystudent.prototype.constructor = Primarystudent;
+  ```
+
+  继续在子原型上定义方法：
+
+  ```javascript
+  Primarystudent.prototype.getGrade = function() {
+      return this.grade;
+  };
+  ```
+
+  创建对象：
+
+  ```javascript
+  var xiaoming = new Primarystudent({
+      name: '小明',
+      grade: 16
+  })
+  ```
+
+------------
+
+### 浏览器对象
+
+#### window
+
++ window有inner/outerWidth/Height属性，可查看浏览器窗口大小
+
+#### navigator
+
++ navitor表示浏览器信息
++ appName属性查看名称
++ appVersion属性查看浏览器版本
++ language属性查看设置的语言
++ platform属性查看操作系统类型
++ userAgent属性查看浏览器设定的userAgent字符串
++ navigator的信息很容易被用户修改，所以JavaScript读取的值不一定是准确的
+
+#### screen
+
++ screen表示屏幕的信息
++ width属性查看屏幕宽度
++ height属性查看屏幕高度
++ colorDepth属性查看颜色位数
+
+#### location
+
++ location表示当前页面url信息
++ href属性获取当前页面url
++ location.assign('url')加载新页面
++ location.reload()重新加载页面
+
+### DOM
+
++ HTML文档解析后就是一颗DOM树，可用JavaScript操作DOM以改变HTML结构
+
++ 获得DOM节点：`document.getElementById()`或`document.getElementsByTagName()`或CSS选择器：`document.getElementsByClassName()`，第一者返回唯一的DOM节点，后二者返回一组DOM节点：
+
+  ```javascript
+  var test = document.getElementById('test');
+  var reds = document.getElementById('test-div').getElementByClass('red')
+  ```
+
+  可用children属性获得子节点：
+
+  `var cs = test.children;`
+
+  还可以通过`querySelector()`和`querySelectorAll()`来获得，括号里边用CSS中选择器的语法：
+
+  `var q1 = document.querySelector('#q1')`
+
+  后边可以加[n]表示第[n+1]个对应节点
+
+  ***Tips***：id选择后可直接进行DOM操作，class和tag法要用中括号指定某一个结点之后才可以进行DOM操作
+
++ 更新DOM：
+
+  + 修改文本：
+
+    用innerHTML修改：
+
+    ```javascript
+    var p = document.getElementById('p-id');
+    p.innerHTML = 'ABC<span style="color : red">red</span>XYZ';
+    ```
+
+    用innerText或textContent修改，此方式无法设置HTML标签
+
+  + 修改CSS：
+
+    ```javascript
+    var p = document.getElementById('p0id');
+    p.style.color = 'red';
+    p.style.fontSize = 'bold';
+    ```
+
+    如上，JavaScript中需要使用驼峰式命名
+
++ 插入DOM：如果在空节点插入，直接用innerHTML；如果节点非空，可用appendChild把原有的一个节点插入到父节点的最后一个子节点：
+
+  ```javascript
+  var js = document.getElementById('js');
+  var list = document.getElementById('list');
+  list.appendChild(js);
+  ```
+
+  上述代码将js插入到了list中
+
+  也可以创建一个新的节点再插入，用createElement()：
+
+  ```javascript
+  var list = document.getElementById('list');
+  var haskell = document.createElement('p');
+  haskell.id = 'haskell';
+  haskell.innerText = 'Haskell';
+  list.appendChild(haskell);
+  ```
+
+  如果要插入到某个特定位置：`parentElement.insertBefore(newElement, referenceElement);`
+
+  newElement就会被插入到referenceElement之前，如：
+
+  ```javascript
+  
+  var f = document.getElementById('test-list'); //父元素
+  var a = document.getElementsByClassName('lang')[0];
+  var b = document.getElementsByClassName('lang')[1];
+  f.insertBefore(a, b);
+  ```
+
+  上述代码将a插在b前
+
++ 删除DOM：先拿到要删除的节点，再获取其父节点，再调用父节点的removeChild()即可：
+
+  ```javascript
+  var self = document.getElementById('to-be-removed');
+  var parent = self.parentElement;
+  parent.removeChile(self);
+  ```
+
+  还可以直接获取父节点就进行操作：
+
+  ```javascript
+  var a = document.getElementById('parent');
+  a.removeChild(a.children[2]);
+  ```
+
+  删除子节点时子节点后边的数字会随时变化，要时刻小心
+
+--------------
+
+### 操作表单
+
++ 获取值：拿到了`<input>`之后，可用value属性获得值，包括文本框内容和select的选项，但如果是用radio或者是checkbox的话要用checked判断用户是否勾选选项
++ 改变值：可用value属性 直接赋值来改变文本框中的内容
++ 提交表单：用form的submit()或待更
+
+### jQuery
+
+#### 选择器
+
++ 按id查找：`var div = $('#abc');`
+
++ 按tag查找：`var s = $('div');`
+
++ 按class查找：`var s = $('.red');`
+
+  若要找同时含有多个class的节点：`var s = $('.red.green');`
+
++ 按属性查找：`var s = $('[属性名=值]');`若值含空格等特殊字符时要用双引号包裹
+
++ 组合查找：`var s = $('div[name = "Joe"]');` `var b = $('div.firstClass');`
+
++ 层级选择器：`var s = $('div p');`
+
++ 子代选择器（只能是父子关系）：`var s = $('div > p');`
+
+拿到对象后，还可以进一步地进行查找过滤：
+
++ 在子节点中查找：用find()
+
+  `var p = ul.find('.dy');`
+
++ 从子节点向上查找：用parent()
+
+  `var p = ul.parent('div[name = 'Joe']');`
+
++ 同级节点查找：用next()或prev()，指上一个或下一个节点
+
++ filter()可以过滤掉不满足要求的节点：`p.filter('.red')`
+
++ 如果获得了多个节点，可用last()、first()、slice()来去掉不必要的节点：
+
+  ```javascript
+  var s = b.firrst();
+  var s = b.last();
+  var s = b.slice(2,4);
+  ```
+
+#### 操作DOM
+
++ 用text()和html()获取节点的文本和原html文本
+
++ 修改文本和html也用text()和html()
+
+  ```javascript
+  var s = $('p.red');
+  s.text('Hello world');
+  s.html('<span>Hello</span> world');
+  ```
+
++ jQuery对象可包含任意个dom节点，进行操作时操作将会执行于包含的每一个节点
+
++ 修改CSS：用jQuery对象的css('name', 'value')，如：
+
+  `$('li.red').css('color', 'red').css('backgroundColor', 'black');`
+
++ 修改DOM的class属性：
+
+  hasClass('className')用于查看是否含有某class
+
+  addClass('className')用于添加class
+
+  removeClass('className')用于删除class
+
++ 隐藏/显示DOM：用hide()或show()
+
++ 获取DOM信息：用height()、width()等可直接获取
+
++ 操作DOM的属性：用attr('attributeName')获取属性值，用removeAttr('attributeName')删除某属性，用attr('attributeName', 'value')改变某属性的值
+
++ 对于表单元素用val()查看值，用val('value')更改值
+
++ 添加DOM：除了用html()外，还可以用append()：
+
+  ```javascript
+  var ul = $('#list'); //拿到父节点
+  var s = document.createElement('li');
+  s.innerHTML('<span>JavaScript</span>');
+  ul.append(s);
+  ```
+
+  append()可以传入字符串也可以传入对象也可以传入函数返回值；append()把DOM添加到最后，prepend()把DOM添加到最前；若添加的DOM已经存在于html文档中，会先删除此DOM再添加，也就是移动DOM；如果要再特定位置插入DOM，用after()或before()，如：
+
+  ```javascript
+  var s = $('#Python'); // 定位到同级元素
+  s.after('<p>Javascript</p>'); //将DOM插入到s后面
+  ```
+
+#### 事件
+
++ 用on
