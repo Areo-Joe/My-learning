@@ -1057,7 +1057,7 @@ typeof可以返回一个值的数据类型，例：`typeof null`返回值为obje
 
 + 获取DOM信息：用height()、width()等可直接获取
 
-+ 操作DOM的属性：用attr('attributeName')获取属性值，用removeAttr('attributeName')删除某属性，用attr('attributeName', 'value')改变某属性的值
++ 操作DOM的属性：用attr('attributeName')获取属性值，用removeAttr('attributeName')删除某属性，用attr('attributeName', 'value')改变某属性的值；prop()用法与attr()类似，更改radio、checkbox时用prop()（亲测）
 
 + 对于表单元素用val()查看值，用val('value')更改值
 
@@ -1079,4 +1079,115 @@ typeof可以返回一个值的数据类型，例：`typeof null`返回值为obje
 
 #### 事件
 
-+ 用on
++ 用on来绑定事件：
+
+  ```javascript
+  var a = $('#test-link');
+  a.on('click', function(){
+      alert('Helllo!');
+  })
+  ```
+
+  或直接用click：
+
+  ```javascript
+  var a = $('#test-link');
+  a.click(function(){
+      alert('Hello!');
+  })
+  ```
+
++ on能绑定的事件：
+
+  + 鼠标：
+
+    click
+
+    dblclick
+
+    mouseenter
+
+    mouseleave
+
+    mousemove
+
+    hover
+
+  + 键盘：
+
+    keydown
+
+    keyup
+
+    keypress
+
+  + 其他：
+
+    focus：获得焦点时触发
+
+    blur：失焦时触发
+
+    change：`<input>`、`<select>`、`<textarea>`内容改变时触发
+
+    submit：form提交时触发
+
+    ready：当页面载入DOM树并完成初始化之后触发，多用于document，以保证选择器能选到正确的节点，如：
+
+    ```javascript
+    $(document).ready(function(){
+        $('#testForm').submit(function(){
+            alert('Submit!');
+        });
+    })
+    ```
+
+    还可以简化为$(function(){...})，如：
+
+    ```javascript
+    $(function(){
+        console.log('init A')
+    })
+    ```
+
++ 用off取消事件绑定：`off('click', function)`，此方法只能取消绑定已命名的函数，对于匿名函数，可用`off('click')`取消所有click绑定的函数，或用`off()`取消绑定的所有事件
+
+#### 动画 
+
++ `hide()`、`show()`、`toggle()`：可以让DOM从左上角消失/出现，传入时间参数（以毫秒为单位）可控制消失事件，也可传入`'slow'`、`'fast'`
+
++ `slideUp()`、`slideDown()`、`slideToggle()`：使DOM从上边界开始消失/出现，参数同上
+
++ `fadeIn()`、`fadeOut()`、`fadeToggle`：使DOM淡入淡出，参数同上
+
++ `animate()`：自定义动画，传入参数为最终的CSS状态，jQuery会自动地在给定时间内过渡到此状态，如：
+
+  ```javascript
+  var div = $('#test-animate');
+  div.animate({
+      opacity: 0.25,
+      width: '25px',
+      height: '15px'
+  }, 3000, function(){
+      console.log('动画完成');
+  })
+  ```
+
++ 动画可以串行执行：
+
+  ```javascript
+  var div = $('#test-animate');
+  div.hide(5000)
+     .delay(3000)
+     .animate({
+      width: '2132px',
+      height: '126px',
+      opacity: 0.25
+  }, 2000, function(){
+      console.log('动画已完成')；
+  })
+  ```
+
+### 定时器
+
++ 设置定时器：`setInterva(funciton(){}, 100);`function是要执行的函数，定时器开始后每隔一个给定时间就会将函数放入执行队列
++ 清除定时器：`clearInterval()`写了定时器就一定要清除定时器，否则会一直占用内存
