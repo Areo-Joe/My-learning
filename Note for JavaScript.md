@@ -1022,7 +1022,7 @@ typeof可以返回一个值的数据类型，例：`typeof null`返回值为obje
 + 如果获得了多个节点，可用last()、first()、slice()来去掉不必要的节点：
 
   ```javascript
-  var s = b.firrst();
+  var s = b.first();
   var s = b.last();
   var s = b.slice(2,4);
   ```
