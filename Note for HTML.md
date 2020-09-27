@@ -9,6 +9,7 @@
 + `<del>`：删除线（不过CSS貌似可以实现）
 + `<ul> <ol> <li>`：列表
 + `<select>`创建下拉选项，搭配`<option>`使用
++ `<form>`：创建表单
 + `<input>`：
   + `type="text"`：让用户输入文本
   + `type="radio"`：创建单选按钮；创建多个`<input type="radio">`后将name属性都设置为相同值即可让用户在多个选项中选择
